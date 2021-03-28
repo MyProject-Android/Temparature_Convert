@@ -15,10 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class HistoryConvert extends Fragment {
 
     SharedPreferences sharedPreferences;
-    TextView txtHistory;
+    TextView txtHistory,textViewToday;
     Button btnClear;
 
     @Nullable
@@ -26,11 +29,14 @@ public class HistoryConvert extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history_convert, container, false);
         txtHistory = view.findViewById(R.id.textViewHistory);
+        textViewToday = view.findViewById(R.id.textViewToday);
         btnClear = view.findViewById(R.id.buttonClear);
+
+        textViewToday.setText("Bạn mở ứng dụng vào lúc: " +DateFormat.getDateTimeInstance().format(new Date()));
 
         sharedPreferences = getActivity().getSharedPreferences("ketqua", Context.MODE_PRIVATE);
         txtHistory.setText(sharedPreferences.getString("history", ""));
-        txtHistory.setMovementMethod(new ScrollingMovementMethod());// scroll textview
+        txtHistory.setMovementMethod(new ScrollingMovementMethod()); // scroll textview
 
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override

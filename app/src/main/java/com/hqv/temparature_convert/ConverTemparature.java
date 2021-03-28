@@ -17,6 +17,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class ConverTemparature extends Fragment {
 
     SharedPreferences sharedPreferences;
@@ -39,13 +42,17 @@ public class ConverTemparature extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.FtoC: {
-                        edtInput.setHint("F");
-                        edtResult.setHint("C");
+                        edtInput.setHint("°F");
+                        edtResult.setHint("°C");
+                        edtInput.setText("");
+                        edtResult.setText("");
                         break;
                     }
                     case R.id.CtoF: {
-                        edtInput.setHint("C");
-                        edtResult.setHint("F");
+                        edtInput.setHint("°C");
+                        edtResult.setHint("°F");
+                        edtInput.setText("");
+                        edtResult.setText("");
                         break;
                     }
                 }
@@ -54,23 +61,25 @@ public class ConverTemparature extends Fragment {
         btnConvert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                history = sharedPreferences.getString("history", "");
+                history = sharedPreferences.getString("history", "Lịch sử chuyển đổi");
                 Double result;
                 txtHistory = getActivity().findViewById(R.id.textViewHistory);
                 if (edtInput.getText().toString().isEmpty() || edtInput.getText().toString().equals(".")) {
                     edtInput.setText(1 + "");
                 }
+                // alt + 0176 là kí hiệu nhiệt độ
                 if (rdbFtoC.isChecked()) {
                     result = convertF_To_C(Double.parseDouble(String.valueOf(edtInput.getText())));
                     edtResult.setText(result.toString());
-                    history = edtInput.getText() + " độ F --> " + edtResult.getText() + " độ C\n" + history;
+                    history = edtInput.getText() + "°F  =  " + edtResult.getText() + "°C\n" + history;
                 } else if (rdbCtoF.isChecked()) {
                     result = convertC_To_F(Double.parseDouble(String.valueOf(edtInput.getText())));
                     edtResult.setText(result.toString());
-                    history = edtInput.getText() + " độ C --> " + edtResult.getText() + " độ F\n" + history;
+                    history = edtInput.getText() + "°C  =  " + edtResult.getText() + "°F\n" + history;
                 }
 
                 txtHistory.setText(history);
+
                 //đưa value history vào sharepreferences với key là history
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("history", history);
